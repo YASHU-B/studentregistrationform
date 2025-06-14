@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Registration Form Validation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 450px;
+      margin: 40px auto;
+      background-color: #f7f9fc;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      
+    }
+
+    h2 {
+      text-align: center;
+      color: #4896d1;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      
+    }
+
+    label {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #34495e;
+
+
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select {
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #bdc3c7;
+      border-radius: 15px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+     
+
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus {
+      border-color: #2980b9;
+      outline: none;
+
+    }
+
+    .gender-group {
+      margin-top: 8px;
+     
+    
+    }
+
+    .gender-group label {
+      font-weight: normal;
+      margin-right: 15px;
+    }
+
+    .error {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 3px;
+    }
+
+    .success-message {
+      color: #27ae60;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 12px;
+      background-color: #b9292b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e9656b;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Student Registration Form</h2>
+
+  <form id="registrationForm" novalidate>
+    <label for="name">Full Name:</label>
+    <input type="text" id="name" name="name" />
+    <div class="error" id="nameError"></div>
+
+    <label for="email">Email Address:</label>
+    <input type="email" id="email" name="email" />
+    <div class="error" id="emailError"></div>
+
+    <label for="course">Course:</label>
+    <select id="course" name="course">
+      <option value="">-- Select Course --</option>
+      <option value="computer_science">CSE</option>
+      <option value="business">CIVIL</option>
+      <option value="engineering">EEE</option>
+      <option value="arts">ECE</option>
+      <option value="mathematics">MECH</option>
+    </select>
+    <div class="error" id="courseError"></div>
+
+    <label>Gender:</label>
+    <div class="gender-group">
+      <label><input type="radio" name="gender" value="male" /> Male</label>
+      <label><input type="radio" name="gender" value="female" /> Female</label>
+      <label><input type="radio" name="gender" value="other" /> Other</label>
+    </div>
+    <div class="error" id="genderError"></div>
+
+    <button type="submit">Register</button>
+
+    <div class="success-message" id="successMessage"></div>
+  </form>
+
+  <script>
+    const form = document.getElementById("registrationForm");
+
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const courseSelect = document.getElementById("course");
+    const genderInputs = document.getElementsByName("gender");
+
+    const nameError = document.getElementById("nameError");
+    const emailError = document.getElementById("emailError");
+    const courseError = document.getElementById("courseError");
+    const genderError = document.getElementById("genderError");
+    const successMessage = document.getElementById("successMessage");
+
+    function validateEmail(email) {
+      // Simple regex for email validation
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    function getSelectedGender() {
+      for (const genderInput of genderInputs) {
+        if (genderInput.checked) return genderInput.value;
+      }
+      return null;
+    }
+
+    function clearErrors() {
+      nameError.textContent = "";
+      emailError.textContent = "";
+      courseError.textContent = "";
+      genderError.textContent = "";
+      successMessage.textContent = "";
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      clearErrors();
+
+      let valid = true;
+
+      // Validate Name
+      if (nameInput.value.trim() === "") {
+        nameError.textContent = "Please enter your full name.";
+        valid = false;
+      }
+
+      // Validate Email
+      if (emailInput.value.trim() === "") {
+        emailError.textContent = "Email is required.";
+        valid = false;
+      } else if (!validateEmail(emailInput.value.trim())) {
+        emailError.textContent = "Please enter a valid email address.";
+        valid = false;
+      }
+
+      // Validate Course
+      if (courseSelect.value === "") {
+        courseError.textContent = "Please select a course.";
+        valid = false;
+      }
+
+      // Validate Gender
+      if (!getSelectedGender()) {
+        genderError.textContent = "Please select your gender.";
+        valid = false;
+      }
+
+      if (valid) {
+        successMessage.textContent = "Registration successful! Thank you.";
+        form.reset();
+      }
+    });
+  </script>
+
+</body>
+</html>
